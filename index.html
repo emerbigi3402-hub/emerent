@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ระบบตรวจสอบรถ Emergency - วิสัญญี</title>
+  <title>ระบบตรวจสอบรถ Emergency - OPD ENT</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -34,7 +34,7 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <h1 class="text-base sm:text-xl font-bold text-gray-800 leading-tight">ระบบตรวจสอบรถ Emergency - แผนกวิสัญญี</h1>
+          <h1 class="text-base sm:text-xl font-bold text-gray-800 leading-tight">ระบบตรวจสอบรถ Emergency - OPD ENT</h1>
           <div class="flex items-center gap-1 mt-1">
             <div id="status-indicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
             <span id="status-text" class="text-xs text-yellow-600 font-medium">กำลังเชื่อมต่อฐานข้อมูล...</span>
@@ -81,12 +81,16 @@
             <input type="hidden" id="checkId">
           </div>
           <div>
-            <label class="block text-base font-bold text-emerald-700 mb-2">เวร <span class="text-red-500">*</span></label>
-            <select id="shift" class="w-full p-3 border border-emerald-200 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
-              <option value="">-- เลือกเวร --</option>
-              <option value="เวรเช้า">เวรเช้า</option>
-              <option value="เวรบ่าย">เวรบ่าย</option>
-              <option value="เวรดึก">เวรดึก</option>
+            <label class="block text-base font-bold text-emerald-700 mb-2">วัน <span class="text-red-500">*</span></label>
+            <select id="dayOfWeek" class="w-full p-3 border border-emerald-200 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+              <option value="">-- เลือกวัน --</option>
+              <option value="จันทร์">จันทร์</option>
+              <option value="อังคาร">อังคาร</option>
+              <option value="พุธ">พุธ</option>
+              <option value="พฤหัสบดี">พฤหัสบดี</option>
+              <option value="ศุกร์">ศุกร์</option>
+              <option value="เสาร์">เสาร์</option>
+              <option value="อาทิตย์">อาทิตย์</option>
             </select>
           </div>
         </div>
@@ -94,7 +98,7 @@
         <div class="space-y-6">
           
           <div class="bg-blue-50 p-card sm:p-5 rounded-xl border border-blue-100">
-            <h3 class="font-bold text-blue-800 mb-3 text-lg border-b border-blue-200 pb-2">ชั้นที่ 1 (ข้ามยาใน Box)</h3>
+            <h3 class="font-bold text-blue-800 mb-3 text-lg border-b border-blue-200 pb-2">ชั้นที่ 1</h3>
             <div class="p-5 bg-white rounded-lg border border-blue-200 shadow-sm mx-auto mb-4">
               <label class="block text-lg font-bold text-blue-800 mb-5 text-center w-full">ประเภท Box ยา <span class="text-red-500">*</span></label>
               <div class="flex flex-col sm:flex-row justify-around items-center gap-4">
@@ -126,18 +130,13 @@
             <div class="grid grid-cols-1 gap-4" id="floor4-container"></div>
           </div>
 
-          <div class="bg-pink-50 p-card sm:p-5 rounded-xl border border-pink-100">
-            <h3 class="font-bold text-pink-800 mb-3 text-lg border-b border-pink-200 pb-2">ชั้นที่ 5</h3>
-            <div class="grid grid-cols-1 gap-4" id="floor5-container"></div>
-          </div>
-
           <div class="bg-gray-100 p-card sm:p-5 rounded-xl border border-gray-200">
             <h3 class="font-bold text-gray-800 mb-4 text-lg border-b border-gray-300 pb-2">👤 ยืนยันการตรวจสอบ</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-lg font-bold text-gray-700">ผู้ตรวจสอบ <span class="text-red-500">*</span></label>
-                  <button type="button" onclick="openInspectorModal()" class="text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow-sm transition-colors">+ เพิ่มรายชื่อใหม่</button>
+                  <button type="button" onclick="openInspectorModal()" class="text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow-sm transition-colors">+ เพิ่มรายชื่อ</button>
                 </div>
                 <div class="flex gap-2">
                   <select id="inspector" class="w-full p-3 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
@@ -184,7 +183,7 @@
           <thead class="bg-gray-200 text-gray-700 text-sm border-b">
             <tr>
               <th class="px-3 py-3 text-left">วันที่ตรวจ</th>
-              <th class="px-3 py-3">เวร</th>
+              <th class="px-3 py-3">วัน</th>
               <th class="px-3 py-3">ผู้ตรวจสอบ</th>
               <th class="px-3 py-3 w-20">จัดการ</th>
             </tr>
@@ -245,37 +244,44 @@
   </div>
 
   <script>
-    // 🚀 ลิงก์ Web App ของแผนกวิสัญญี (แก้ไขตรงนี้)
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOBSmzvhKO0T31qh0qsYnn44DUuBRdb5zrqY-mxc7TniZMheCGpbTKIOcPNxnBKONiZA/exec';
+    // 🚀 ลิงก์ Web App ของ OPD ENT
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby4-zqFWsYDdn0XB_IlBBbfrS3Wy6ig53UlYFNPqAD2R4_FkGP-0058DDEDLpVB-Ir6/exec';
     
-    // 💡 รายการอุปกรณ์ของแผนกวิสัญญี (19 ชิ้น)
+    // 💡 รายการอุปกรณ์ OPD ENT (25 ชิ้น)
     const equipmentDataFloor1 = [
       'Syringe Disposable ขนาดต่างๆ อย่างละ 3', 
       'เข็มฉีดยา เบอร์18-24 อย่างละ 3'
     ]; 
+    
     const equipmentDataFloor2 = [
-      'ET-Tube No.7, 7.5, 8 อย่างละ 2', 
+      'IV Catheter No. 24, 22, 20, 18 อย่างละ 3', 
+      '0.9 % NSS (1,000 ml 1 ขวด)', 
+      'Set IV 3 set', 
+      'Extension Tube 3 set', 
+      'Three - way 3 อัน', 
+      'Transpore 1 นิ้ว 1ม้วน', 
+      'Tourniquet 2 อัน',
+      'กรรไกร 1',
+      'ชามรูปไต, ไฟฉาย, แว่นตา อย่างละ 1',
+      'ถุงมือ, Mask อย่างละ 5 อัน'
+    ]; 
+    
+    const equipmentDataFloor3 = [
+      'ET-Tube No.7, 7.5, 8,อย่างละ 2', 
       'Laryngoscope + Blade (พร้อมถ่าน) 1 ชุด', 
       'Guide wire, Magill Forceps อย่างละ 1', 
       'Orol Airway 2 อัน', 
       'K-Y Jelly 1', 
-      'พลาสเตอร์เหนียวติด Tube', 
-      'สายต่อออกซิเจน 1 เส้น'
-    ]; 
-    const equipmentDataFloor3 = [
-      'IV Catheter No. 24, 22, 20, 18 อย่างละ 3', 
-      'Extension Tube 3 set', 
-      'Three - way 3 อัน', 
-      'Tourniquet 2 อัน', 
-      'กรรไกร 1'
-    ]; 
-    const equipmentDataFloor4 = [
       'สาย Suction No 14,16 อย่างละ 1', 
-      'ชามรูปไต, ไฟฉาย, แว่นตา อย่างละ 1', 
-      'ถุงมือ, Mask อย่างละ 5 อัน'
+      'Ambu bag + Mask  1 ชุด', 
+      'O2 Mask c bag,O2 canular อย่างละ 1', 
+      'สายต่อออกซิเจน 1 เส้น', 
+      'พลาสเตอร์เหนียวติด Tube'
     ]; 
-    const equipmentDataFloor5 = [
-      'Ambu bag (เด็กเล็ก/เด็กโต/ผู้ใหญ่) อย่างละ 1 ชุด', 
+    
+    const equipmentDataFloor4 = [
+      'กระดานและปากกา 1', 
+      'CPR reccord', 
       'Stethoscope 1'
     ];
 
@@ -302,7 +308,6 @@
       }
     }
 
-    // 🚀 ตัวอ่านวันที่อัจฉริยะ รองรับทุกรูปแบบ (M/D/Y, D/M/Y, พ.ศ.)
     function parseAnyDate(dateStr) {
       if (!dateStr) return null;
       if (dateStr.includes('T')) dateStr = dateStr.split('T')[0];
@@ -320,7 +325,7 @@
               
               if (p0 > 12) { d = p0; m = p1; } 
               else if (p1 > 12) { d = p1; m = p0; } 
-              else { d = p0; m = p1; } // ค่าเริ่มต้นให้เป็น D/M/Y ตามแบบไทย
+              else { d = p0; m = p1; } 
           } else if (p0 > 1000) { 
               y = p0;
               if (y > 2500) y -= 543;
@@ -333,10 +338,16 @@
 
     window.onload = async () => {
       const today = new Date();
+      
+      // ดึงวันที่
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, '0');
       const dd = String(today.getDate()).padStart(2, '0');
       document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+      
+      // 🚀 ดึงวันปัจจุบันภาษาไทย
+      const daysThai = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+      document.getElementById('dayOfWeek').value = daysThai[today.getDay()];
       
       setupHistoryFilters(); buildEquipmentFormUI(); initializeSignaturePad();
       updateHeaderClock(); setInterval(updateHeaderClock, 1000);
@@ -394,7 +405,6 @@
       allMedicines.forEach(med => {
         if (!med.expiry_date) return;
         
-        // 🚀 ใช้ฟังก์ชันแปลงวันที่แบบฉลาด
         let expD = parseAnyDate(med.expiry_date);
 
         if (expD && !isNaN(expD.getTime())) {
@@ -454,7 +464,6 @@
       buildRadios(equipmentDataFloor2, 'floor2-container'); 
       buildRadios(equipmentDataFloor3, 'floor3-container'); 
       buildRadios(equipmentDataFloor4, 'floor4-container'); 
-      buildRadios(equipmentDataFloor5, 'floor5-container'); 
     }
 
     function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
@@ -473,7 +482,7 @@
     }
 
     function clearSignature() { ctxPad.clearRect(0, 0, canvasPad.width, canvasPad.height); }
-    function isSignatureEmpty() { const blankPad = document.createElement('canvas'); blankPad.width = canvasPad.width; blankPad.height = canvasPad.height; return canvasPad.toDataURL() === blankPad.toDataURL(); }
+    function isSignatureEmpty() { const blankPad = document.createElement('canvas'); blankPad.width = canvasPad.width; canvasPad.height = canvasPad.height; return canvasPad.toDataURL() === blankPad.toDataURL(); }
 
     function displayMedicines() {
       const tbody = document.getElementById('medicine-table-body');
@@ -587,7 +596,7 @@
     async function deleteInspector() { const selectedInspector = document.getElementById('inspector').value; if(!selectedInspector) return Swal.fire('แจ้งเตือน', 'กรุณาเลือกชื่อผู้ตรวจสอบที่ต้องการลบทิ้งในช่อง Dropdown ก่อนครับ', 'warning'); if(confirm(`ต้องการลบคุณ "${selectedInspector}" ออกจากระบบใช่หรือไม่?`)) { Swal.fire({ title: 'กำลังลบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() }); await apiCall('deleteName', selectedInspector); await fetchInitialDataFromDatabase(); Swal.fire({ icon: 'success', title: 'ลบสำเร็จ', timer: 1500, showConfirmButton: false }); } }
 
     // ------------------------------------------
-    // ประวัติการตรวจ (โชว์ทั้งเดือน)
+    // ประวัติการตรวจ
     // ------------------------------------------
     function displayHistoryRecords() {
       const tbody = document.getElementById('history-table-body');
@@ -620,14 +629,13 @@
         return;
       }
       
-      // 🚀 เอา .slice(-15) ออก เพื่อแสดงทั้งหมดของเดือนนั้น
       const recentHistory = filteredRecords.reverse();
       
       tbody.innerHTML = recentHistory.map(history => {
         return `
           <tr class="border-b border-gray-100 hover:bg-emerald-50 transition-colors">
             <td class="px-3 py-4 text-left font-bold text-emerald-700 text-sm break-words">${history.date_display}</td>
-            <td class="px-3 py-4 text-center text-sm text-gray-800 font-medium">${history.shift}</td>
+            <td class="px-3 py-4 text-center text-sm text-gray-800 font-medium">${history.dayOfWeek}</td>
             <td class="px-3 py-4 text-left text-sm text-gray-800 font-medium break-words">${history.inspector}</td>
             <td class="px-3 py-4 text-center"><button type="button" onclick="viewHistoryDetailModal('${history.id}')" class="text-blue-500 hover:text-blue-700 text-3xl transform hover:scale-110 transition-transform" title="ดูรายละเอียดแบบเต็ม">👁️</button></td>
           </tr>
@@ -647,7 +655,7 @@
 
       let equipListHtml = '';
       
-      equipListHtml += `<h5 class="text-xs font-bold text-blue-700 mt-3 mb-1 uppercase tracking-wider">ชั้นที่ 1 (ข้ามยา Box)</h5>`;
+      equipListHtml += `<h5 class="text-xs font-bold text-blue-700 mt-3 mb-1 uppercase tracking-wider">ชั้นที่ 1</h5>`;
       for(let i=1; i<=2; i++) {
         const val = targetRecord['eq_'+i];
         const status = val === '✓' ? '<span class="text-green-600 font-bold">✓ มี</span>' : (val === '✗' ? '<span class="text-red-600 font-bold">✗ ไม่มี</span>' : '-');
@@ -655,42 +663,35 @@
       }
       
       equipListHtml += `<h5 class="text-xs font-bold text-green-700 mt-4 mb-1 uppercase tracking-wider">ชั้นที่ 2</h5>`;
-      for(let i=3; i<=9; i++) {
+      for(let i=3; i<=12; i++) {
         const val = targetRecord['eq_'+i];
         const status = val === '✓' ? '<span class="text-green-600 font-bold">✓ มี</span>' : (val === '✗' ? '<span class="text-red-600 font-bold">✗ ไม่มี</span>' : '-');
         equipListHtml += `<div class="flex justify-between border-b border-green-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor2[i-3]}</span> <span>${status}</span></div>`;
       }
       
       equipListHtml += `<h5 class="text-xs font-bold text-purple-700 mt-4 mb-1 uppercase tracking-wider">ชั้นที่ 3</h5>`;
-      for(let i=10; i<=14; i++) {
+      for(let i=13; i<=22; i++) {
         const val = targetRecord['eq_'+i];
         const status = val === '✓' ? '<span class="text-green-600 font-bold">✓ มี</span>' : (val === '✗' ? '<span class="text-red-600 font-bold">✗ ไม่มี</span>' : '-');
-        equipListHtml += `<div class="flex justify-between border-b border-purple-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor3[i-10]}</span> <span>${status}</span></div>`;
+        equipListHtml += `<div class="flex justify-between border-b border-purple-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor3[i-13]}</span> <span>${status}</span></div>`;
       }
       
       equipListHtml += `<h5 class="text-xs font-bold text-orange-700 mt-4 mb-1 uppercase tracking-wider">ชั้นที่ 4</h5>`;
-      for(let i=15; i<=17; i++) {
+      for(let i=23; i<=25; i++) {
         const val = targetRecord['eq_'+i];
         const status = val === '✓' ? '<span class="text-green-600 font-bold">✓ มี</span>' : (val === '✗' ? '<span class="text-red-600 font-bold">✗ ไม่มี</span>' : '-');
-        equipListHtml += `<div class="flex justify-between border-b border-orange-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor4[i-15]}</span> <span>${status}</span></div>`;
-      }
-
-      equipListHtml += `<h5 class="text-xs font-bold text-pink-700 mt-4 mb-1 uppercase tracking-wider">ชั้นที่ 5</h5>`;
-      for(let i=18; i<=19; i++) {
-        const val = targetRecord['eq_'+i];
-        const status = val === '✓' ? '<span class="text-green-600 font-bold">✓ มี</span>' : (val === '✗' ? '<span class="text-red-600 font-bold">✗ ไม่มี</span>' : '-');
-        equipListHtml += `<div class="flex justify-between border-b border-pink-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor5[i-18]}</span> <span>${status}</span></div>`;
+        equipListHtml += `<div class="flex justify-between border-b border-orange-100 py-2"><span class="text-gray-600 text-xs sm:text-sm w-3/4">${equipmentDataFloor4[i-23]}</span> <span>${status}</span></div>`;
       }
 
       contentDiv.innerHTML = `
         <div class="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-100 shadow-sm">
           <p class="mb-2"><span class="font-bold text-blue-800">วันที่ตรวจ:</span> <span class="text-gray-700">${targetRecord.date_display}</span></p>
-          <p class="mb-2"><span class="font-bold text-blue-800">เวร:</span> <span class="text-gray-700">${targetRecord.shift}</span></p>
+          <p class="mb-2"><span class="font-bold text-blue-800">วัน:</span> <span class="text-gray-700">${targetRecord.dayOfWeek}</span></p>
           <p class="mb-2"><span class="font-bold text-blue-800">ผู้ตรวจสอบ:</span> <span class="text-gray-700">${targetRecord.inspector}</span></p>
           <p><span class="font-bold text-blue-800">ประเภท Box ยา:</span> <span class="text-emerald-600 font-bold">${targetRecord.box_type}</span></p>
         </div>
         <div class="bg-yellow-50 p-4 rounded-xl mb-4 border border-yellow-100 shadow-sm">
-          <h4 class="font-bold text-yellow-800 mb-2 border-b border-yellow-200 pb-2">รายละเอียดสถานะอุปกรณ์ (19 ชิ้น)</h4>
+          <h4 class="font-bold text-yellow-800 mb-2 border-b border-yellow-200 pb-2">รายละเอียดสถานะอุปกรณ์ (25 ชิ้น)</h4>
           <div class="space-y-1">${equipListHtml}</div>
         </div>
         <div class="bg-pink-50 p-4 rounded-xl border border-pink-100 shadow-sm text-center">
@@ -715,19 +716,18 @@
       isEditingRecord = true;
       document.getElementById('checkId').value = targetRecord.id;
       
-      // แปลงกลับเป็น YYYY-MM-DD สำหรับฟอร์ม HTML
       const ymdObj = parseAnyDate(targetRecord.date_display);
       if(ymdObj && !isNaN(ymdObj.getTime())) {
           document.getElementById('date').value = `${ymdObj.getFullYear()}-${String(ymdObj.getMonth()+1).padStart(2,'0')}-${String(ymdObj.getDate()).padStart(2,'0')}`;
       }
       
-      document.getElementById('shift').value = targetRecord.shift;
+      document.getElementById('dayOfWeek').value = targetRecord.dayOfWeek;
       document.getElementById('inspector').value = targetRecord.inspector;
       
       const boxRadio = document.querySelector(`input[name="medicineType"][value="${targetRecord.box_type}"]`);
       if(boxRadio) boxRadio.checked = true;
 
-      for(let i = 1; i <= 19; i++) {
+      for(let i = 1; i <= 25; i++) {
         const eqState = targetRecord['eq_'+i];
         if (eqState) {
           const eqRadio = document.querySelector(`input[name="eq_${i}"][value="${eqState}"]`);
@@ -759,6 +759,9 @@
       const dd = String(today.getDate()).padStart(2, '0');
       document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
       
+      const daysThai = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+      document.getElementById('dayOfWeek').value = daysThai[today.getDay()];
+      
       clearSignature(); 
     }
 
@@ -771,7 +774,6 @@
       }
     }
 
-    // 🚀 บังคับตรวจ 19 ชิ้น
     document.getElementById('emergencyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -780,18 +782,19 @@
       }
 
       const selectedDate = document.getElementById('date').value;
-      const selectedShift = document.getElementById('shift').value;
+      const selectedDay = document.getElementById('dayOfWeek').value;
       
       const parts = selectedDate.split('-');
       const dayNum = parseInt(parts[2], 10);
       const monthNum = parseInt(parts[1], 10) - 1;
       const yearNum = parseInt(parts[0], 10);
       const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-      const generatedId = `${dayNum}${thaiMonths[monthNum]}${yearNum + 543}${selectedShift}`;
+      // ID แบบ OPD ใช้วันที่รวมกับวันประจำสัปดาห์
+      const generatedId = `${dayNum}${thaiMonths[monthNum]}${yearNum + 543}${selectedDay}`;
 
       const inspectionPayload = {
         id: isEditingRecord ? document.getElementById('checkId').value : generatedId,
-        shift: selectedShift,
+        dayOfWeek: selectedDay,
         raw_date: selectedDate,
         box_type: document.querySelector('input[name="medicineType"]:checked').value,
         inspector: document.getElementById('inspector').value,
@@ -800,7 +803,7 @@
       };
       
       let hasMissingItems = false;
-      for(let i = 1; i <= 19; i++) {
+      for(let i = 1; i <= 25; i++) {
         const checkedRadio = document.querySelector(`input[name="eq_${i}"]:checked`);
         if (checkedRadio) {
           inspectionPayload[`eq_${i}`] = checkedRadio.value;
@@ -810,7 +813,7 @@
       }
 
       if (hasMissingItems) {
-        return Swal.fire({ icon: 'error', title: 'ตรวจสอบข้อมูลไม่ครบ', text: 'กรุณาตรวจสอบและเลือกสถานะอุปกรณ์ให้ครบทั้ง 19 รายการครับ' });
+        return Swal.fire({ icon: 'error', title: 'ตรวจสอบข้อมูลไม่ครบ', text: 'กรุณาตรวจสอบและเลือกสถานะอุปกรณ์ให้ครบทั้ง 25 รายการครับ' });
       }
 
       const btn = document.getElementById('submit-btn');
